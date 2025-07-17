@@ -1,59 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Zona Gratuita - LexGoBot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #1488CC, #2B32B2);
-            color: white;
-            text-align: center;
-            padding-top: 60px;
-            margin: 0;
-        }
-        h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        input, button {
-            font-size: 20px;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            border: none;
-        }
-        #respuesta {
-            margin-top: 30px;
-            font-size: 24px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-        }
-        .mic {
-            background-color: #FF851B;
-            color: white;
-            cursor: pointer;
-        }
-        .mic:hover {
-            background-color: #e76f00;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Zona Gratuita - LexGoBot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+        color: white;
+        text-align: center;
+        padding-top: 60px;
+        margin: 0;
+    }
+    h1 {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+    input, button {
+        font-size: 20px;
+        margin: 10px;
+        padding: 15px;
+        border-radius: 10px;
+        border: none;
+    }
+    #respuesta {
+        margin: 30px auto;
+        font-size: 24px;
+        max-width: 800px;
+        padding: 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+    }
+    .mic {
+        background-color: #FF851B;
+        color: white;
+        cursor: pointer;
+    }
+    .mic:hover {
+        background-color: #e76f00;
+    }
+    /* Botón Apóyanos */
+    .apoyanos {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        background-color: #e91e63;
+        color: white;
+        padding: 12px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 16px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        z-index: 100;
+    }
+</style>
 </head>
 <body>
 
-<h1>Zona Gratuita LexGoBot ML 🎤🤖</h1>
-<p>Habla o escribe tu consulta gratuita jurídica con voz y Machine Learning.</p>
+<h1>Zona Gratuita LexGoBot 🎁</h1>
+<p>Consulta jurídica básica y trámites orientativos con voz y texto.</p>
 
-<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button>
-<br>
+<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button><br>
 <input id="pregunta" placeholder="Escribe tu consulta aquí">
 <br>
 <button class="mic" onclick="enviarPregunta()">Enviar</button>
 <p id="respuesta"></p>
+
+<!-- Botón Apóyanos -->
+<a href="https://link-donacion" target="_blank" class="apoyanos">💖 ¡Apóyanos!</a>
+
+<!-- Botón WhatsApp -->
+<a href="https://wa.me/573001112233" target="_blank" style="position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25D366; color: white; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100;">💬</a>
 
 <script>
 const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -69,7 +86,7 @@ function escucharPregunta() {
 
 async function enviarPregunta() {
     let pregunta = document.getElementById('pregunta').value;
-    let respuesta = await fetch('https://tu-colab-url-gratuito/consulta', {
+    let respuesta = await fetch('https://tu-colab-url-gratuita/consulta', {
         method: 'POST',
         body: JSON.stringify({pregunta}),
         headers: {'Content-Type': 'application/json'}
