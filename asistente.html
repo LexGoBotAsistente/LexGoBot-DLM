@@ -1,82 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Asistente General - LexGoBot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #4b79a1, #283e51);
-            color: white;
-            text-align: center;
-            padding-top: 60px;
-            margin: 0;
-        }
-        h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        input, button {
-            font-size: 20px;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            border: none;
-        }
-        #respuesta {
-            margin-top: 30px;
-            font-size: 24px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-        }
-        .mic {
-            background-color: #FF851B;
-            color: white;
-            cursor: pointer;
-        }
-        .mic:hover {
-            background-color: #e76f00;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Asistente de Voz - LexGoBot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #4A00E0, #8E2DE2);
+        color: white;
+        text-align: center;
+        padding-top: 60px;
+        margin: 0;
+    }
+    h1 {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+    #respuesta {
+        margin: 30px auto;
+        max-width: 800px;
+        font-size: 28px;
+        padding: 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+    }
+</style>
 </head>
-<body>
+<body onload="iniciarConversacion()">
 
-<h1>Asistente General LexGoBot ML 🎤🤖</h1>
-<p>Habla o escribe tu consulta, LexGoBot te responde con voz y Machine Learning.</p>
+<h1>LexGoBot Asistente de Voz 🎤</h1>
+<p id="respuesta">Iniciando conversación...</p>
 
-<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button>
-<br>
-<input id="pregunta" placeholder="Escribe tu consulta aquí">
-<br>
-<button class="mic" onclick="enviarPregunta()">Enviar</button>
-<p id="respuesta"></p>
+<!-- Botón WhatsApp -->
+<a href="https://wa.me/573001112233" target="_blank" style="position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25D366; color: white; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100;">💬</a>
 
 <script>
 const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 reconocimiento.lang = 'es-ES';
 
-function escucharPregunta() {
+function iniciarConversacion() {
+    hablar("Bienvenido a LexGoBot, asistente de voz. Puedes hablar y yo te contestaré.");
     reconocimiento.start();
-    reconocimiento.onresult = function(event) {
-        document.getElementById('pregunta').value = event.results[0][0].transcript;
-        enviarPregunta();
-    };
 }
 
-async function enviarPregunta() {
-    let pregunta = document.getElementById('pregunta').value;
+reconocimiento.onresult = async function(event) {
+    let pregunta = event.results[0][0].transcript;
+    document.getElementById('respuesta').innerText = 'Consultando sobre: ' + pregunta;
     let respuesta = await fetch('https://tu-colab-url/consulta', {
         method: 'POST',
         body: JSON.stringify({pregunta}),
         headers: {'Content-Type': 'application/json'}
     }).then(res => res.json());
-
     document.getElementById('respuesta').innerText = respuesta.respuesta;
     hablar(respuesta.respuesta);
+};
+
+reconocimiento.onend = function() {
+    hablar("¿Deseas preguntar algo más?");
+    reconocimiento.start();
 }
 
 function hablar(texto){
@@ -89,5 +70,3 @@ function hablar(texto){
 </body>
 </html>
 
-     
-                
