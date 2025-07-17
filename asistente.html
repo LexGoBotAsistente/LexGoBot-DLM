@@ -1,12 +1,26 @@
-
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>LexGoBot - Asistente con Voz</title>
     <style>
-        body { font-family: Arial; background: linear-gradient(to bottom, #0074D9, #7FDBFF); color: white; text-align: center; padding-top: 80px; }
-        button { margin: 15px; padding: 20px; font-size: 18px; background-color: #FF851B; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        body { 
+            font-family: Arial; 
+            background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
+            color: white; 
+            text-align: center; 
+            padding-top: 80px; 
+        }
+        button { 
+            margin: 15px; 
+            padding: 20px; 
+            font-size: 18px; 
+            background-color: #FF851B; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+        }
         #texto { margin-top: 20px; font-size: 20px; }
     </style>
 </head>
@@ -49,13 +63,13 @@
             respuesta.lang = "es-ES";
 
             if (pregunta.includes("contrato")) {
-                respuesta.text = "Un contrato es un acuerdo de voluntades que genera obligaciones y derechos.";
+                respuesta.text = "Un contrato es un acuerdo de voluntades que genera derechos y obligaciones.";
             } else if (pregunta.includes("derecho")) {
                 respuesta.text = "El derecho protege tus deberes y obligaciones como ciudadano.";
             } else if (pregunta.includes("saludo")) {
-                respuesta.text = "¡Hola! Espero que tengas un gran día.";
+                respuesta.text = "¡Hola! Espero que tengas un excelente día.";
             } else {
-                respuesta.text = "No tengo una respuesta precisa, pero puedes consultar con un abogado.";
+                respuesta.text = "No tengo una respuesta precisa para esa pregunta, pero puedes consultar a un abogado.";
             }
 
             speechSynthesis.speak(respuesta);
@@ -65,3 +79,7 @@
 
 </body>
 </html>
+
+   
+     
+   
