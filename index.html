@@ -9,36 +9,71 @@
             background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
             color: white; 
             text-align: center; 
-            padding-top: 100px;
+            padding-top: 60px;
+            margin: 0;
         }
-        .btn {
+        .zona {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .zona .seccion {
+            background-color: rgba(0,0,0,0.2);
             margin: 15px;
-            padding: 18px 25px;
-            font-size: 18px;
+            padding: 30px;
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+        }
+        .seccion button {
+            margin-top: 15px;
+            padding: 15px 20px;
+            font-size: 16px;
             background-color: #FF851B;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
         }
-        h1 { font-size: 48px; margin-bottom: 10px; }
-        p { font-size: 20px; margin-bottom: 30px; }
+        h1 { font-size: 48px; margin-bottom: 15px; }
+        p { font-size: 20px; margin: 10px; }
+        .whatsapp {
+            margin-top: 30px;
+        }
     </style>
 </head>
-<body onload="saludar()">
+<body onload="saludoBienvenida()">
 
-    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
-    <p>Consulta gratuita básica. Asistencia en voz y texto.</p>
+    <h1>LexGoBot 🏛️</h1>
+    <p>Bienvenido a las asesorías jurídicas con voz y texto.</p>
 
-    <button class="btn" onclick="window.location.href='asistente.html'">Iniciar Asistente</button>
-    <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
+    <div class="zona">
+        <div class="seccion">
+            <h2>Zona Gratuita</h2>
+            <p>Consultas rápidas, documentos básicos y orientación legal.</p>
+            <button onclick="window.location.href='asistente.html'">Ir a Asistente Gratuito</button>
+        </div>
+
+        <div class="seccion">
+            <h2>Zona Premium</h2>
+            <p>Asesorías especializadas, documentos avanzados y revisión de casos.</p>
+            <button onclick="window.location.href='premium.html'">Ir a Asistente Premium</button>
+        </div>
+    </div>
+
+    <div class="whatsapp">
+        <button onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">
+            📱 Consultar por WhatsApp
+        </button>
+    </div>
 
     <script>
-        function saludar() {
-            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual. Selecciona una opción para continuar.");
-            saludo.lang = "es-ES";
-            speechSynthesis.speak(saludo);
+        function saludoBienvenida(){
+            const bienvenida = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Elija zona gratuita o premium para recibir asistencia jurídica.");
+            bienvenida.lang = "es-ES";
+            speechSynthesis.speak(bienvenida);
         }
     </script>
 
