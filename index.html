@@ -9,73 +9,124 @@
             background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
             color: white; 
             text-align: center; 
-            padding-top: 60px;
-            margin: 0;
+            padding-top: 100px;
         }
-        .zona {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .zona .seccion {
-            background-color: rgba(0,0,0,0.2);
+        .btn {
             margin: 15px;
-            padding: 30px;
-            width: 300px;
-            border-radius: 15px;
-            box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
-        }
-        .seccion button {
-            margin-top: 15px;
-            padding: 15px 20px;
-            font-size: 16px;
+            padding: 18px 25px;
+            font-size: 18px;
             background-color: #FF851B;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
         }
-        h1 { font-size: 48px; margin-bottom: 15px; }
-        p { font-size: 20px; margin: 10px; }
-        .whatsapp {
-            margin-top: 30px;
+        h1 { font-size: 48px; margin-bottom: 10px; }
+        p { font-size: 22px; margin-bottom: 30px; }
+        .hidden { display: none; }
+        .lawyer-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .lawyer {
+            margin: 0 20px;
+            text-align: center;
+        }
+        .lawyer img {
+            width: 200px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
     </style>
 </head>
-<body onload="saludoBienvenida()">
+<body onload="saludar()">
 
-    <h1>LexGoBot 🏛️</h1>
-    <p>Bienvenido a las asesorías jurídicas con voz y texto.</p>
+    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
 
-    <div class="zona">
-        <div class="seccion">
-            <h2>Zona Gratuita</h2>
-            <p>Consultas rápidas, documentos básicos y orientación legal.</p>
-            <button onclick="window.location.href='asistente.html'">Ir a Asistente Gratuito</button>
+    <button class="btn" onclick="mostrarOpciones()">Iniciar Asistente</button>
+    <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
+
+    <div id="opciones" class="hidden">
+        <p>Selecciona tu zona:</p>
+        <div class="lawyer-container">
+            <div class="lawyer">
+                <img src="https://cdn-icons-png.flaticon.com/512/1995/1995664.png" alt="Zona Gratuita">
+                <p>Zona Gratuita</p>
+                <button class="btn" onclick="iniciarAsistente('gratuita')">Entrar</button>
+            </div>
+            <div class="lawyer">
+                <img src="https://cdn-icons-png.flaticon.com/512/1995/1995664.png" alt="Zona Premium">
+                <p>Zona Premium</p>
+                <button class="btn" onclick="iniciarAsistente('premium')">Entrar</button>
+            </div>
         </div>
-
-        <div class="seccion">
-            <h2>Zona Premium</h2>
-            <p>Asesorías especializadas, documentos avanzados y revisión de casos.</p>
-            <button onclick="window.location.href='premium.html'">Ir a Asistente Premium</button>
-        </div>
-    </div>
-
-    <div class="whatsapp">
-        <button onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">
-            📱 Consultar por WhatsApp
-        </button>
     </div>
 
     <script>
-        function saludoBienvenida(){
-            const bienvenida = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Elija zona gratuita o premium para recibir asistencia jurídica.");
+        function saludar() {
+            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual. Presiona para iniciar.");
+            saludo.lang = "es-ES";
+            speechSynthesis.speak(saludo);
+        }
+
+        function mostrarOpciones() {
+            document.getElementById('opciones').classList.remove('hidden');
+        }
+
+        function iniciarAsistente(zona) {
+            const zonaTexto = zona === 'gratuita' ? 'zona gratuita' : 'zona premium';
+            const bienvenida = new SpeechSynthesisUtterance(`Has ingresado a la ${zonaTexto}. Pregúntame lo que necesites. Estoy escuchando.`);
             bienvenida.lang = "es-ES";
             speechSynthesis.speak(bienvenida);
+            startRecognition();
+        }
+
+        function startRecognition() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const pregunta = event.results[0][0].transcript;
+                console.log("Pregunta del usuario:", pregunta);
+                responderAsistente(pregunta);
+            };
+
+            recognition.onend = function() {
+                // Reanudar automáticamente para escuchar la próxima pregunta
+                startRecognition();
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Error en reconocimiento de voz:", event.error);
+                setTimeout(startRecognition, 1000);
+            };
+        }
+
+        function responderAsistente(pregunta) {
+            let respuesta = "";
+            if (pregunta.toLowerCase().includes("contrato")) {
+                respuesta = "Un contrato es un acuerdo legalmente vinculante entre dos o más partes.";
+            } else if (pregunta.toLowerCase().includes("derecho de familia")) {
+                respuesta = "El derecho de familia regula relaciones como el matrimonio, divorcio y custodia.";
+            } else {
+                respuesta = "Estoy procesando tu consulta. Muy pronto tendré una mejor respuesta.";
+            }
+
+            const respuestaVoz = new SpeechSynthesisUtterance(respuesta);
+            respuestaVoz.lang = "es-ES";
+            speechSynthesis.speak(respuestaVoz);
         }
     </script>
 
 </body>
 </html>
+            
+
+        
