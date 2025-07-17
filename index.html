@@ -2,137 +2,107 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot Asistente Jurídico</title>
+    <title>LexGoBot Asistente Jurídico ML</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
-            color: white; 
-            text-align: center; 
-            padding-top: 100px;
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+            color: white;
+            text-align: center;
+            padding-top: 60px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 22px;
+            margin-bottom: 30px;
         }
         .btn {
-            margin: 15px;
-            padding: 18px 25px;
-            font-size: 18px;
+            margin: 20px;
+            padding: 20px 30px;
+            font-size: 20px;
             background-color: #FF851B;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
         }
-        h1 { font-size: 48px; margin-bottom: 10px; }
-        p { font-size: 22px; margin-bottom: 30px; }
-        .hidden { display: none; }
-        .lawyer-container {
+        .btn:hover {
+            background-color: #FF6300;
+            transform: scale(1.05);
+        }
+        .zona {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            margin-top: 40px;
+            gap: 40px;
+            margin: 40px auto;
+            max-width: 1000px;
         }
-        .lawyer {
-            margin: 0 30px;
-            text-align: center;
+        .zona-bloque {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
         }
-        .lawyer img {
-            width: 200px;
+        .zona-bloque:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .zona img {
+            width: 120px;
             border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
         }
-        #respuesta { font-size: 20px; margin-top: 30px; }
     </style>
 </head>
-<body onload="saludar()">
+<body onload="saludoInicial()">
 
-    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
+    <h1>LexGoBot Asistente Jurídico ML 🏛️</h1>
+    <p>Selecciona la zona de atención jurídica con IA y Machine Learning:</p>
 
-    <button class="btn" onclick="mostrarOpciones()">Iniciar Asistente</button>
-    <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
-
-    <div id="opciones" class="hidden">
-        <p>Selecciona tu zona de asesoría jurídica:</p>
-        <div class="lawyer-container">
-            <div class="lawyer">
-                <img src="https://cdn-icons-png.flaticon.com/512/1995/1995664.png" alt="Zona Gratuita">
-                <p><strong>Zona Gratuita</strong></p>
-                <button class="btn" onclick="iniciarAsistente('gratuita')">Entrar Gratis</button>
-            </div>
-            <div class="lawyer">
-                <img src="https://cdn-icons-png.flaticon.com/512/3048/3048396.png" alt="Zona Premium">
-                <p><strong>Zona Premium</strong></p>
-                <button class="btn" onclick="iniciarAsistente('premium')">Entrar Premium</button>
-            </div>
+    <div class="zona">
+        <div class="zona-bloque">
+            <h2>ASISTENTE GENERAL</h2>
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png" alt="Asistente General">
+            <br>
+            <button class="btn" onclick="redirigir('asistente.html')">Ingresar</button>
+        </div>
+        <div class="zona-bloque">
+            <h2>ZONA GRATUITA</h2>
+            <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png" alt="Zona Gratuita">
+            <br>
+            <button class="btn" onclick="redirigir('gratuito.html')">Ingresar</button>
+        </div>
+        <div class="zona-bloque">
+            <h2>ZONA PREMIUM</h2>
+            <img src="https://cdn-icons-png.flaticon.com/512/3048/3048396.png" alt="Zona Premium">
+            <br>
+            <button class="btn" onclick="redirigir('premium.html')">Ingresar</button>
         </div>
     </div>
 
-    <div id="respuesta"></div>
-
     <script>
-        function saludar() {
-            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual. Presiona para iniciar.");
+        function saludoInicial() {
+            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Selecciona una zona de asesoría jurídica con inteligencia artificial y aprendizaje automático.");
             saludo.lang = "es-ES";
             speechSynthesis.speak(saludo);
         }
 
-        function mostrarOpciones() {
-            document.getElementById('opciones').classList.remove('hidden');
-        }
-
-        async function iniciarAsistente(zona) {
-            const bienvenida = new SpeechSynthesisUtterance(`Has ingresado a la zona ${zona === 'gratuita' ? 'gratuita' : 'premium'}. Estoy escuchando tus consultas.`);
-            bienvenida.lang = "es-ES";
-            speechSynthesis.speak(bienvenida);
-            startRecognition();
-        }
-
-        function startRecognition() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'es-ES';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            recognition.start();
-
-            recognition.onresult = async function(event) {
-                const pregunta = event.results[0][0].transcript;
-                document.getElementById('respuesta').innerText = 'Procesando: ' + pregunta;
-                const respuesta = await obtenerRespuestaDesdeColab(pregunta);
-                hablar(respuesta);
-            };
-
-            recognition.onend = function() {
-                startRecognition();
-            };
-
-            recognition.onerror = function(event) {
-                console.error("Error en reconocimiento de voz:", event.error);
-                setTimeout(startRecognition, 1000);
-            };
-        }
-
-        function hablar(texto) {
-            document.getElementById('respuesta').innerText = texto;
-            const voz = new SpeechSynthesisUtterance(texto);
-            voz.lang = "es-ES";
-            speechSynthesis.speak(voz);
-        }
-
-        async function obtenerRespuestaDesdeColab(pregunta) {
-            try {
-                const response = await fetch("https://tu-servidor-colab.fly.dev/consulta", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ pregunta })
-                });
-                const data = await response.json();
-                return data.respuesta;
-            } catch (error) {
-                console.error("Error consultando Colab:", error);
-                return "No fue posible procesar la consulta en este momento.";
-            }
+        function redirigir(zona) {
+            window.location.href = zona;
         }
     </script>
+
 </body>
 </html>
 
+
+    
