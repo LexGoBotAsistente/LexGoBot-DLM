@@ -2,27 +2,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot Asistente Jurídico</title>
+    <title>LexGoBot - Asistente con Voz</title>
     <style>
-        body { font-family: Arial; text-align: center; background: linear-gradient(#0074D9, #7FDBFF); color: white; }
-        .container { margin-top: 10%; }
-        .btn { padding: 15px; background: #FF851B; border: none; font-size: 18px; color: white; border-radius: 10px; cursor: pointer; margin: 10px; }
+        body { font-family: Arial; background: linear-gradient(to bottom, #0074D9, #7FDBFF); color: white; text-align: center; padding-top: 80px; }
+        button { margin: 15px; padding: 20px; font-size: 18px; background-color: #FF851B; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        #texto { margin-top: 20px; font-size: 20px; }
     </style>
 </head>
-<body onload="hablar()">
-    <div class="container">
-        <h1>LexGoBot Asistente Jurídico 🏛️</h1>
-        <p>Consulta gratuita básica. Asistencia en voz y texto.</p>
-        <button class="btn" onclick="window.location.href='asistente.html'">Iniciar Asistente</button>
-        <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
-    </div>
+<body>
+
+    <h1>👩‍⚖️ LexGoBot Asistente Jurídico</h1>
+    <p>Habla conmigo o déjame responderte en voz.</p>
+
+    <button onclick="hablar()">Hablar</button>
+    <button onclick="escuchar()">Escuchar tu pregunta</button>
+
+    <p id="texto"></p>
 
     <script>
         function hablar() {
-            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual.");
-            saludo.lang = "es-ES";
-            speechSynthesis.speak(saludo);
+            const mensaje = new SpeechSynthesisUtterance("Hola, soy LexGoBot. Puedo ayudarte con consultas jurídicas básicas. Pregúntame.");
+            mensaje.lang = "es-ES";
+            speechSynthesis.speak(mensaje);
+            document.getElementById('texto').innerText = "LexGoBot: Hola, soy tu asistente jurídico.";
+        }
+
+        function escuchar() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Tu navegador no soporta reconocimiento de voz.");
+                return;
+            }
+
+            const reconocimiento = new webkitSpeechRecognition();
+            reconocimiento.lang = "es-ES";
+            reconocimiento.onresult = function(event) {
+                const resultado = event.results[0][0].transcript;
+                document.getElementById('texto').innerText = "Tú dijiste: " + resultado;
+                responder(resultado);
+            };
+            reconocimiento.start();
+        }
+
+        function responder(pregunta) {
+            const respuesta = new SpeechSynthesisUtterance();
+            respuesta.lang = "es-ES";
+
+            if (pregunta.includes("contrato")) {
+                respuesta.text = "Un contrato es un acuerdo de voluntades que genera obligaciones y derechos.";
+            } else if (pregunta.includes("derecho")) {
+                respuesta.text = "El derecho protege tus deberes y obligaciones como ciudadano.";
+            } else if (pregunta.includes("saludo")) {
+                respuesta.text = "¡Hola! Espero que tengas un gran día.";
+            } else {
+                respuesta.text = "No tengo una respuesta precisa, pero puedes consultar con un abogado.";
+            }
+
+            speechSynthesis.speak(respuesta);
+            document.getElementById('texto').innerText += "\nLexGoBot responde: " + respuesta.text;
         }
     </script>
+
 </body>
 </html>
