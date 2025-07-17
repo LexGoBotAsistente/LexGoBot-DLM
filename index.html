@@ -1,90 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Zona Premium - LexGoBot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #8E2DE2, #4A00E0);
-            color: white;
-            text-align: center;
-            padding-top: 60px;
-            margin: 0;
-        }
-        h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        input, button {
-            font-size: 20px;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            border: none;
-        }
-        #respuesta {
-            margin-top: 30px;
-            font-size: 24px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-        }
-        .mic {
-            background-color: #FF851B;
-            color: white;
-            cursor: pointer;
-        }
-        .mic:hover {
-            background-color: #e76f00;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>LexGoBot - Inicio</title>
+<style>
+body {
+    background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    text-align: center; color: #fff;
+}
+
+h1 {
+    font-size: 50px;
+    margin-top: 40px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.zona {
+    display: flex;
+    justify-content: center; flex-wrap: wrap;
+    margin: 40px;
+}
+
+.zona-bloque {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    margin: 20px; padding: 20px;
+    width: 280px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.zona-bloque:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+.zona-bloque img {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.btn {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding: 15px 25px;
+    font-size: 20px;
+    background-color: #FF851B;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    width: 90%;
+}
+
+.btn:hover {
+    background-color: #FF6300;
+    transform: scale(1.05);
+}
+
+.footer {
+    margin: 40px 0;
+    font-size: 16px;
+    color: #f1f1f1;
+}
+
+/* Botón WhatsApp flotante */
+.whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    text-decoration: none;
+    z-index: 1000;
+}
+
+/* Botón Apóyanos flotante */
+.apoyanos {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: #FF851B;
+    color: white;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    text-decoration: none;
+    transition: transform 0.2s;
+    z-index: 1000;
+}
+
+.apoyanos:hover {
+    transform: scale(1.08);
+    background-color: #FF6300;
+}
+</style>
 </head>
 <body>
 
-<h1>Zona Premium LexGoBot ML 🎤🤖</h1>
-<p>Consulta jurídica premium con IA y predicciones ML. Habla o escribe.</p>
+<h1>LexGoBot 🏛️</h1>
 
-<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button>
-<br>
-<input id="pregunta" placeholder="Escribe tu consulta premium aquí">
-<br>
-<button class="mic" onclick="enviarPregunta()">Enviar</button>
-<p id="respuesta"></p>
+<div class="zona">
+  <div class="zona-bloque">
+    <img src="https://images.unsplash.com/photo-1603576662469-343b4aeb8e45?auto=format&fit=crop&w=640" alt="Abogado Zona Gratuita">
+    <h2>Zona Gratuita</h2>
+    <button class="btn" onclick="location.href='gratuito.html'">Ingresar Gratis</button>
+  </div>
 
-<script>
-const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-reconocimiento.lang = 'es-ES';
+  <div class="zona-bloque">
+    <img src="https://images.unsplash.com/photo-1612349311277-0d70d3d62e2c?auto=format&fit=crop&w=640" alt="Abogado Zona Premium">
+    <h2>Zona Premium</h2>
+    <button class="btn" onclick="location.href='premium.html'">Ingresar Premium</button>
+  </div>
+</div>
 
-function escucharPregunta() {
-    reconocimiento.start();
-    reconocimiento.onresult = function(event) {
-        document.getElementById('pregunta').value = event.results[0][0].transcript;
-        enviarPregunta();
-    };
-}
+<button class="btn" onclick="location.href='asistente.html'">🎤 Asistente de Voz</button>
 
-async function enviarPregunta() {
-    let pregunta = document.getElementById('pregunta').value;
-    let respuesta = await fetch('https://tu-colab-url-premium/consulta', {
-        method: 'POST',
-        body: JSON.stringify({pregunta}),
-        headers: {'Content-Type': 'application/json'}
-    }).then(res => res.json());
+<div class="footer">© 2025 LexGoBot Jurídico</div>
 
-    document.getElementById('respuesta').innerText = respuesta.respuesta;
-    hablar(respuesta.respuesta);
-}
+<!-- BOTÓN FLOTANTE WHATSAPP -->
+<a class="whatsapp" href="https://wa.me/573001234567" target="_blank" title="Escríbenos por WhatsApp">💬</a>
 
-function hablar(texto){
-    let voz = new SpeechSynthesisUtterance(texto);
-    voz.lang = "es-ES";
-    speechSynthesis.speak(voz);
-}
-</script>
+<!-- BOTÓN FLOTANTE APOYANOS -->
+<a class="apoyanos" href="https://api.whatsapp.com/send?phone=573424565436&text=Hola%2C+quiero+apoyar+a+LexGoBot+por+Nequi+3424565436" target="_blank">💖 Apóyanos</a>
 
 </body>
 </html>
+
+
