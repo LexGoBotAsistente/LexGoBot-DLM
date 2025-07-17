@@ -6,16 +6,23 @@
     <style>
         body { font-family: Arial; text-align: center; background: linear-gradient(#0074D9, #7FDBFF); color: white; }
         .container { margin-top: 10%; }
-        .btn { padding: 15px; background: #FF851B; border: none; font-size: 18px; color: white; border-radius: 10px; cursor: pointer; }
+        .btn { padding: 15px; background: #FF851B; border: none; font-size: 18px; color: white; border-radius: 10px; cursor: pointer; margin: 10px; }
     </style>
 </head>
-<body>
+<body onload="hablar()">
     <div class="container">
         <h1>LexGoBot Asistente Jurídico 🏛️</h1>
         <p>Consulta gratuita básica. Asistencia en voz y texto.</p>
-        <button class="btn" onclick="window.location.href='https://colab.research.google.com/drive/URL-DE-TU-COLAB-AQUÍ'">Iniciar Asistente</button>
-        <br><br>
+        <button class="btn" onclick="window.location.href='asistente.html'">Iniciar Asistente</button>
         <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
     </div>
+
+    <script>
+        function hablar() {
+            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual.");
+            saludo.lang = "es-ES";
+            speechSynthesis.speak(saludo);
+        }
+    </script>
 </body>
 </html>
