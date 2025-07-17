@@ -1,108 +1,88 @@
+<!-- Estructura principal de LexGoBot - INDEX -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>LexGoBot Asistente Jurídico ML</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #0074D9, #7FDBFF);
-            color: white;
-            text-align: center;
-            padding-top: 60px;
-            margin: 0;
-        }
-        h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 22px;
-            margin-bottom: 30px;
-        }
-        .btn {
-            margin: 20px;
-            padding: 20px 30px;
-            font-size: 20px;
-            background-color: #FF851B;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #FF6300;
-            transform: scale(1.05);
-        }
-        .zona {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 40px;
-            margin: 40px auto;
-            max-width: 1000px;
-        }
-        .zona-bloque {
-            width: 250px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
-        }
-        .zona-bloque:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .zona img {
-            width: 120px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>LexGoBot Asistente Jurídico</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+        color: white;
+        text-align: center;
+        padding-top: 60px;
+    }
+    h1 { font-size: 48px; margin-bottom: 20px; }
+    .btn {
+        margin: 20px;
+        padding: 20px 30px;
+        font-size: 20px;
+        background-color: #FF851B;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+        transition: all 0.3s ease;
+    }
+    .btn:hover { background-color: #FF6300; transform: scale(1.05); }
+    .zona {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 40px;
+        margin: 40px auto;
+    }
+    .zona-bloque {
+        width: 250px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        transition: transform 0.3s;
+    }
+    .zona img {
+        width: 120px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+</style>
 </head>
-<body onload="saludoInicial()">
+<body onload="bienvenida()">
 
-    <h1>LexGoBot Asistente Jurídico ML 🏛️</h1>
-    <p>Selecciona la zona de atención jurídica con IA y Machine Learning:</p>
+<h1>LexGoBot Asistente Jurídico 🏛️</h1>
 
-    <div class="zona">
-        <div class="zona-bloque">
-            <h2>ASISTENTE GENERAL</h2>
-            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png" alt="Asistente General">
-            <br>
-            <button class="btn" onclick="redirigir('asistente.html')">Ingresar</button>
-        </div>
-        <div class="zona-bloque">
-            <h2>ZONA GRATUITA</h2>
-            <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png" alt="Zona Gratuita">
-            <br>
-            <button class="btn" onclick="redirigir('gratuito.html')">Ingresar</button>
-        </div>
-        <div class="zona-bloque">
-            <h2>ZONA PREMIUM</h2>
-            <img src="https://cdn-icons-png.flaticon.com/512/3048/3048396.png" alt="Zona Premium">
-            <br>
-            <button class="btn" onclick="redirigir('premium.html')">Ingresar</button>
-        </div>
+<div class="zona">
+    <div class="zona-bloque">
+        <h2>Zona Gratuita</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png">
+        <button class="btn" onclick="location.href='gratuito.html'">Ingresar</button>
     </div>
+    <div class="zona-bloque">
+        <h2>Zona Premium</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/3048/3048396.png">
+        <button class="btn" onclick="location.href='premium.html'">Ingresar</button>
+    </div>
+    <div class="zona-bloque">
+        <h2>Asistente de Voz</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png">
+        <button class="btn" onclick="location.href='asistente.html'">Ingresar</button>
+    </div>
+</div>
 
-    <script>
-        function saludoInicial() {
-            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Selecciona una zona de asesoría jurídica con inteligencia artificial y aprendizaje automático.");
-            saludo.lang = "es-ES";
-            speechSynthesis.speak(saludo);
-        }
+<!-- Botón flotante de WhatsApp -->
+<a href="https://wa.me/573001112233" target="_blank" style="position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25D366; color: white; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100;">💬</a>
 
-        function redirigir(zona) {
-            window.location.href = zona;
-        }
-    </script>
+<script>
+function bienvenida(){
+    let saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Elige zona gratuita, premium o asistente de voz.");
+    saludo.lang = "es-ES";
+    speechSynthesis.speak(saludo);
+}
+</script>
 
 </body>
 </html>
 
 
-    
+
