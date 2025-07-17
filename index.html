@@ -2,66 +2,80 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>LexGoBot - Asistente Jurídico</title>
+<title>LexGoBot - Inicio</title>
 <style>
 body {
-    background: linear-gradient(to bottom, #0074D9, #7FDBFF);
-    font-family: Arial, sans-serif;
-    margin: 0; padding: 0;
-    text-align: center; color: #fff;
+  background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+  font-family: Arial, sans-serif;
+  margin: 0; padding: 0;
+  text-align: center; color: #fff;
 }
-h1 { font-size: 48px; margin-top: 40px; }
+h1 {
+  font-size: 48px;
+  margin-top: 40px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
 .zona {
-    display: flex; justify-content: center; flex-wrap: wrap; margin: 40px;
+  display: flex;
+  justify-content: center; flex-wrap: wrap;
+  margin: 40px;
 }
 .zona-bloque {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    margin: 20px; padding: 20px;
-    width: 280px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  margin: 20px; padding: 20px;
+  width: 260px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 .zona-bloque:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
 }
 .zona-bloque img {
-    width: 240px; height: 240px;
-    border-radius: 20px;
-    object-fit: cover;
-    margin-bottom: 15px;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 10px;
 }
 .btn {
-    display: block; margin: 0 auto; margin-top: 10px;
-    padding: 15px 25px; font-size: 20px;
-    background-color: #FF851B; color: white;
-    border: none; border-radius: 12px; cursor: pointer;
-    transition: transform 0.2s, background-color 0.3s;
-    width: 90%;
+  display: block;
+  margin: 10px auto 0;
+  padding: 12px 20px;
+  font-size: 18px;
+  background-color: #FF851B;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  width: 80%;
 }
-.btn:hover { background-color: #FF6300; transform: scale(1.05); }
+.btn:hover {
+  background-color: #FF6300;
+  transform: scale(1.05);
+}
 .footer { margin: 40px 0; font-size: 16px; color: #f1f1f1; }
-/* WhatsApp */
 .whatsapp {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 60px; height: 60px;
-    background: #25D366; color: white; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 35px; text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    z-index: 1000;
+  position: fixed; bottom: 20px; right: 20px;
+  width: 60px; height: 60px; background: #25D366;
+  color: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 35px; text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 1000;
 }
-/* Apóyanos */
 .apoyanos {
-    position: fixed; bottom: 100px; right: 20px;
-    background: #FF851B; color: white;
-    padding: 12px 18px; font-size: 16px;
-    border-radius: 25px; text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    transition: transform 0.2s; z-index: 1000;
+  position: fixed; bottom: 100px; right: 20px;
+  background: #FF851B; color: white; padding: 10px 16px;
+  font-size: 14px; border-radius: 20px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+  z-index: 1000;
 }
-.apoyanos:hover { transform: scale(1.08); background-color: #FF6300; }
+.apoyanos:hover { transform: scale(1.05); background-color: #FF6300; }
 </style>
 </head>
 <body>
@@ -70,13 +84,13 @@ h1 { font-size: 48px; margin-top: 40px; }
 
 <div class="zona">
   <div class="zona-bloque">
-    <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?fit=crop&w=400&q=80" alt="Abogados Zona Gratuita">
+    <img src="https://cdn.pixabay.com/photo/2023/01/31/16/14/ai-7758038_1280.png" alt="Robot Zona Gratuita">
     <h2>Zona Gratuita</h2>
     <button class="btn" onclick="location.href='gratuito.html'">Ingresar Gratis</button>
   </div>
 
   <div class="zona-bloque">
-    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?fit=crop&w=400&q=80" alt="Abogados Zona Premium">
+    <img src="https://cdn.pixabay.com/photo/2020/12/10/18/01/robot-5822369_1280.jpg" alt="Robot Zona Premium">
     <h2>Zona Premium</h2>
     <button class="btn" onclick="location.href='premium.html'">Ingresar Premium</button>
   </div>
