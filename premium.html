@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Zona Premium - LexGoBot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #8E2DE2, #4A00E0);
+            color: white;
+            text-align: center;
+            padding-top: 60px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        input, button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+        }
+        #respuesta {
+            margin-top: 30px;
+            font-size: 24px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        .mic {
+            background-color: #FF851B;
+            color: white;
+            cursor: pointer;
+        }
+        .mic:hover {
+            background-color: #e76f00;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Zona Premium LexGoBot ML 🎤🤖</h1>
+<p>Consulta jurídica premium con IA y predicciones ML. Habla o escribe.</p>
+
+<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button>
+<br>
+<input id="pregunta" placeholder="Escribe tu consulta premium aquí">
+<br>
+<button class="mic" onclick="enviarPregunta()">Enviar</button>
+<p id="respuesta"></p>
+
+<script>
+const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+reconocimiento.lang = 'es-ES';
+
+function escucharPregunta() {
+    reconocimiento.start();
+    reconocimiento.onresult = function(event) {
+        document.getElementById('pregunta').value = event.results[0][0].transcript;
+        enviarPregunta();
+    };
+}
+
+async function enviarPregunta() {
+    let pregunta = document.getElementById('pregunta').value;
+    let respuesta = await fetch('https://tu-colab-url-premium/consulta', {
+        method: 'POST',
+        body: JSON.stringify({pregunta}),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json());
+
+    document.getElementById('respuesta').innerText = respuesta.respuesta;
+    hablar(respuesta.respuesta);
+}
+
+function hablar(texto){
+    let voz = new SpeechSynthesisUtterance(texto);
+    voz.lang = "es-ES";
+    speechSynthesis.speak(voz);
+}
+</script>
+
+</body>
+</html>
