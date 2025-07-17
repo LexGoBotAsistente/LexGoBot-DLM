@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>LexGoBot Asistente Jurídico</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
+            color: white; 
+            text-align: center; 
+            padding-top: 100px;
+        }
+        .btn {
+            margin: 15px;
+            padding: 18px 25px;
+            font-size: 18px;
+            background-color: #FF851B;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 48px; margin-bottom: 10px; }
+        p { font-size: 20px; margin-bottom: 30px; }
+    </style>
+</head>
+<body onload="saludar()">
+
+    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
+    <p>Consulta gratuita básica. Asistencia en voz y texto.</p>
+
+    <button class="btn" onclick="window.location.href='asistente.html'">Iniciar Asistente</button>
+    <button class="btn" onclick="window.location.href='https://wa.me/3214567890?text=Hola%20quiero%20una%20consulta%20legal'">Chat WhatsApp</button>
+
+    <script>
+        function saludar() {
+            const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot, tu asistente jurídico virtual. Selecciona una opción para continuar.");
+            saludo.lang = "es-ES";
+            speechSynthesis.speak(saludo);
+        }
+    </script>
+
+</body>
+</html>
