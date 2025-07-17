@@ -2,84 +2,92 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot - Asistente con Voz</title>
+    <title>Asistente General - LexGoBot</title>
     <style>
-        body { 
-            font-family: Arial; 
-            background: linear-gradient(to bottom, #0074D9, #7FDBFF); 
-            color: white; 
-            text-align: center; 
-            padding-top: 80px; 
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #4b79a1, #283e51);
+            color: white;
+            text-align: center;
+            padding-top: 60px;
+            margin: 0;
         }
-        button { 
-            margin: 15px; 
-            padding: 20px; 
-            font-size: 18px; 
-            background-color: #FF851B; 
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            cursor: pointer; 
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
-        #texto { margin-top: 20px; font-size: 20px; }
+        input, button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+        }
+        #respuesta {
+            margin-top: 30px;
+            font-size: 24px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        .mic {
+            background-color: #FF851B;
+            color: white;
+            cursor: pointer;
+        }
+        .mic:hover {
+            background-color: #e76f00;
+        }
     </style>
 </head>
 <body>
 
-    <h1>👩‍⚖️ LexGoBot Asistente Jurídico</h1>
-    <p>Habla conmigo o déjame responderte en voz.</p>
+<h1>Asistente General LexGoBot ML 🎤🤖</h1>
+<p>Habla o escribe tu consulta, LexGoBot te responde con voz y Machine Learning.</p>
 
-    <button onclick="hablar()">Hablar</button>
-    <button onclick="escuchar()">Escuchar tu pregunta</button>
+<button class="mic" onclick="escucharPregunta()">🎤 Hablar</button>
+<br>
+<input id="pregunta" placeholder="Escribe tu consulta aquí">
+<br>
+<button class="mic" onclick="enviarPregunta()">Enviar</button>
+<p id="respuesta"></p>
 
-    <p id="texto"></p>
+<script>
+const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+reconocimiento.lang = 'es-ES';
 
-    <script>
-        function hablar() {
-            const mensaje = new SpeechSynthesisUtterance("Hola, soy LexGoBot. Puedo ayudarte con consultas jurídicas básicas. Pregúntame.");
-            mensaje.lang = "es-ES";
-            speechSynthesis.speak(mensaje);
-            document.getElementById('texto').innerText = "LexGoBot: Hola, soy tu asistente jurídico.";
-        }
+function escucharPregunta() {
+    reconocimiento.start();
+    reconocimiento.onresult = function(event) {
+        document.getElementById('pregunta').value = event.results[0][0].transcript;
+        enviarPregunta();
+    };
+}
 
-        function escuchar() {
-            if (!('webkitSpeechRecognition' in window)) {
-                alert("Tu navegador no soporta reconocimiento de voz.");
-                return;
-            }
+async function enviarPregunta() {
+    let pregunta = document.getElementById('pregunta').value;
+    let respuesta = await fetch('https://tu-colab-url/consulta', {
+        method: 'POST',
+        body: JSON.stringify({pregunta}),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json());
 
-            const reconocimiento = new webkitSpeechRecognition();
-            reconocimiento.lang = "es-ES";
-            reconocimiento.onresult = function(event) {
-                const resultado = event.results[0][0].transcript;
-                document.getElementById('texto').innerText = "Tú dijiste: " + resultado;
-                responder(resultado);
-            };
-            reconocimiento.start();
-        }
+    document.getElementById('respuesta').innerText = respuesta.respuesta;
+    hablar(respuesta.respuesta);
+}
 
-        function responder(pregunta) {
-            const respuesta = new SpeechSynthesisUtterance();
-            respuesta.lang = "es-ES";
-
-            if (pregunta.includes("contrato")) {
-                respuesta.text = "Un contrato es un acuerdo de voluntades que genera derechos y obligaciones.";
-            } else if (pregunta.includes("derecho")) {
-                respuesta.text = "El derecho protege tus deberes y obligaciones como ciudadano.";
-            } else if (pregunta.includes("saludo")) {
-                respuesta.text = "¡Hola! Espero que tengas un excelente día.";
-            } else {
-                respuesta.text = "No tengo una respuesta precisa para esa pregunta, pero puedes consultar a un abogado.";
-            }
-
-            speechSynthesis.speak(respuesta);
-            document.getElementById('texto').innerText += "\nLexGoBot responde: " + respuesta.text;
-        }
-    </script>
+function hablar(texto){
+    let voz = new SpeechSynthesisUtterance(texto);
+    voz.lang = "es-ES";
+    speechSynthesis.speak(voz);
+}
+</script>
 
 </body>
 </html>
 
-   
      
-   
+                
