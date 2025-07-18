@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot Asistente Completo</title>
+    <title>LexGoBot Asistente Final</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,9 +56,9 @@
 
         button {
             margin-top: 10px;
-            background-color: #007bff;
+            background-color: #ff9900;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             font-size: 16px;
             border-radius: 8px;
@@ -67,7 +67,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #cc7a00;
             transform: scale(1.05);
         }
     </style>
@@ -79,27 +79,29 @@
     <div class="gratis">Zona Gratuita</div>
     <div class="premium">Zona Premium</div>
 
+    <!-- Transcripción de voz -->
     <div id="transcripcion">Aquí aparecerá lo que diga el usuario...</div>
+
+    <!-- Respuesta del asistente -->
     <div id="respuesta">Aquí aparecerá la respuesta del asistente...</div>
 
-    <button onclick="iniciarEscucha()">🎤 Activar Micrófono y Escuchar</button>
+    <!-- Botón para activar asistente de voz automático -->
+    <button onclick="activarAsistenteVoz()">🎤 Activar Asistente de Voz Automático</button>
 
+    <!-- Opción para escribir pregunta -->
     <div id="escribir-pregunta">
         <textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
-        <button onclick="enviarPregunta()">Enviar</button>
+        <button onclick="enviarPregunta()">Enviar (Texto solo)</button>
     </div>
 
     <script>
-        // Asistente de voz escucha
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'es-ES';
         recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
 
-        // Voz para responder
         const synth = window.speechSynthesis;
 
-        function iniciarEscucha() {
+        function activarAsistenteVoz() {
             document.getElementById('transcripcion').innerText = 'Escuchando...';
             recognition.start();
         }
@@ -107,14 +109,14 @@
         recognition.onresult = (event) => {
             const pregunta = event.results[0][0].transcript;
             document.getElementById('transcripcion').innerText = 'Tú dijiste: ' + pregunta;
-            procesarPregunta(pregunta);
+            procesarPreguntaVoz(pregunta);
         };
 
         recognition.onerror = (event) => {
             document.getElementById('transcripcion').innerText = 'Error al escuchar: ' + event.error;
         };
 
-        function procesarPregunta(texto) {
+        function procesarPreguntaVoz(texto) {
             let respuesta = "Esta es la respuesta a tu pregunta: " + texto;
             document.getElementById('respuesta').innerText = respuesta;
             hablar(respuesta);
@@ -133,7 +135,9 @@
             let pregunta = document.getElementById('preguntaTexto').value.trim();
             if (pregunta !== '') {
                 document.getElementById('transcripcion').innerText = 'Tú escribiste: ' + pregunta;
-                procesarPregunta(pregunta);
+                let respuesta = "Esta es la respuesta a tu pregunta: " + pregunta;
+                document.getElementById('respuesta').innerText = respuesta;
+                // No se activa voz aquí
                 document.getElementById('preguntaTexto').value = '';
             } else {
                 alert('Por favor escribe una pregunta.');
