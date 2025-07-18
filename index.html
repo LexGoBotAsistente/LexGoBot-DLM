@@ -7,8 +7,9 @@
 body {
     background: linear-gradient(to bottom, #0074D9, #7FDBFF);
     font-family: Arial, sans-serif;
+    text-align: center;
+    color: #fff;
     margin: 0; padding: 0;
-    text-align: center; color: #fff;
 }
 
 h1 {
@@ -19,46 +20,39 @@ h1 {
 
 .zona {
     display: flex;
-    justify-content: center; flex-wrap: wrap;
+    justify-content: center;
+    flex-wrap: wrap;
     margin: 40px;
 }
 
 .zona-bloque {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    margin: 20px; padding: 20px;
+    margin: 20px;
+    padding: 20px;
     width: 280px;
-    transition: transform 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.zona-bloque:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-}
-
 h2 {
-    color: #ffffff;
+    font-size: 28px;
     margin-bottom: 15px;
 }
 
 .btn {
-    display: block;
-    margin: 0 auto;
     margin-top: 10px;
     padding: 15px 25px;
     font-size: 20px;
-    background-color: #98ff98; /* Verde menta */
-    color: #000;
+    background-color: #A9A9A9;
+    color: white;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.3s;
     width: 90%;
 }
 
 .btn:hover {
-    background-color: #7ce97c;
+    background-color: #8F8F8F;
     transform: scale(1.05);
 }
 
@@ -68,45 +62,6 @@ h2 {
     color: #f1f1f1;
 }
 
-/* Botón WhatsApp flotante */
-.whatsapp {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: #25D366;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    text-decoration: none;
-    z-index: 1000;
-}
-
-/* Botón Apóyanos flotante */
-.apoyanos {
-    position: fixed;
-    bottom: 100px;
-    right: 20px;
-    background: #FF851B;
-    color: white;
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 25px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    text-decoration: none;
-    transition: transform 0.2s;
-    z-index: 1000;
-}
-
-.apoyanos:hover {
-    transform: scale(1.08);
-    background-color: #FF6300;
-}
 </style>
 </head>
 <body>
@@ -116,22 +71,18 @@ h2 {
 <div class="zona">
   <div class="zona-bloque">
     <h2>Zona Gratuita</h2>
-    <button class="btn" onclick="location.href='gratuito.html'">Ingresar Zona Gratuita</button>
+    <button class="btn" onclick="location.href='gratuito.html'">Ingresar zona gratuita</button>
   </div>
 
   <div class="zona-bloque">
     <h2>Zona Premium</h2>
-    <button class="btn" onclick="location.href='premium.html'">Ingresar Zona Premium</button>
+    <button class="btn" onclick="location.href='premium.html'">Ingresar zona premium</button>
   </div>
 </div>
 
-<button class="btn" onclick="location.href='asistente.html'">🎤 Asistente Jurídico</button>
+<button class="btn" onclick="location.href='asistente.html'">🎤 Asistente de Voz</button>
 
 <div class="footer">© 2025 LexGoBot Jurídico</div>
-
-<a class="whatsapp" href="https://wa.me/573001234567" target="_blank" title="WhatsApp">💬</a>
-
-<a class="apoyanos" href="https://api.whatsapp.com/send?phone=573424565436&text=Hola%2C+quiero+apoyar+a+LexGoBot+por+Nequi+3424565436" target="_blank">💖 Apóyanos</a>
 
 </body>
 </html>
