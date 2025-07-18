@@ -2,148 +2,118 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot Asistente Final</title>
+    <title>Asistente Inteligente LexGoBot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f7f7f7;
+            background-color: #f9f9f9;
         }
-
-        .gratis, .premium {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+        .seccion {
+            margin-bottom: 20px;
         }
-
-        .gratis {
-            background-color: #007bff;
-        }
-
-        .premium {
-            background-color: #ff9900;
-        }
-
-        .gratis:hover, .premium:hover {
-            transform: scale(1.05);
-        }
-
-        #respuesta, #transcripcion {
-            background-color: #e6e6e6;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        #escribir-pregunta {
-            margin-top: 15px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 80px;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 16px;
-            resize: none;
-        }
-
-        button {
-            margin-top: 10px;
+        .boton {
             background-color: #ff9900;
             color: white;
-            padding: 12px 25px;
+            padding: 15px;
+            font-size: 18px;
             border: none;
-            font-size: 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s;
         }
-
-        button:hover {
+        .boton:hover {
             background-color: #cc7a00;
             transform: scale(1.05);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #respuesta, #transcripcion {
+            background-color: #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
 
-    <h1>LexGoBot Asistente</h1>
-
-    <div class="gratis">Zona Gratuita</div>
-    <div class="premium">Zona Premium</div>
-
-    <!-- Transcripción de voz -->
-    <div id="transcripcion">Aquí aparecerá lo que diga el usuario...</div>
-
-    <!-- Respuesta del asistente -->
-    <div id="respuesta">Aquí aparecerá la respuesta del asistente...</div>
-
-    <!-- Botón para activar asistente de voz automático -->
-    <button onclick="activarAsistenteVoz()">🎤 Activar Asistente de Voz Automático</button>
-
-    <!-- Opción para escribir pregunta -->
-    <div id="escribir-pregunta">
-        <textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
-        <button onclick="enviarPregunta()">Enviar (Texto solo)</button>
+    <!-- Sección para voz -->
+    <div class="seccion">
+        <button class="boton" onclick="activarVoz()">🎤 Activar Asistente de Voz Automático</button>
+        <div id="transcripcion">Aquí se mostrará lo que dices...</div>
+        <div id="respuesta">Aquí aparecerá la respuesta del asistente...</div>
     </div>
 
-    <script>
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'es-ES';
-        recognition.interimResults = false;
+    <!-- Sección para texto -->
+    <div class="seccion">
+        <textarea id="preguntaTexto" placeholder="Escribe tu pregunta o caso..."></textarea>
+        <button class="boton" onclick="enviarPorTexto()">Enviar Pregunta Escrita</button>
+        <div id="respuestaTexto">Aquí aparecerá la respuesta escrita...</div>
+    </div>
 
-        const synth = window.speechSynthesis;
+<script>
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'es-ES';
+recognition.interimResults = false;
+const synth = window.speechSynthesis;
 
-        function activarAsistenteVoz() {
-            document.getElementById('transcripcion').innerText = 'Escuchando...';
-            recognition.start();
-        }
+function activarVoz() {
+    document.getElementById('transcripcion').innerText = 'Escuchando...';
+    recognition.start();
+}
 
-        recognition.onresult = (event) => {
-            const pregunta = event.results[0][0].transcript;
-            document.getElementById('transcripcion').innerText = 'Tú dijiste: ' + pregunta;
-            procesarPreguntaVoz(pregunta);
-        };
+recognition.onresult = (event) => {
+    const pregunta = event.results[0][0].transcript;
+    document.getElementById('transcripcion').innerText = 'Tú dijiste: ' + pregunta;
+    consultarColab(pregunta, true);
+};
 
-        recognition.onerror = (event) => {
-            document.getElementById('transcripcion').innerText = 'Error al escuchar: ' + event.error;
-        };
+recognition.onerror = (event) => {
+    document.getElementById('transcripcion').innerText = 'Error: ' + event.error;
+};
 
-        function procesarPreguntaVoz(texto) {
-            let respuesta = "Esta es la respuesta a tu pregunta: " + texto;
-            document.getElementById('respuesta').innerText = respuesta;
-            hablar(respuesta);
-        }
+function enviarPorTexto() {
+    const pregunta = document.getElementById('preguntaTexto').value.trim();
+    if (pregunta) {
+        consultarColab(pregunta, false);
+        document.getElementById('preguntaTexto').value = '';
+    } else {
+        alert('Por favor escribe una pregunta.');
+    }
+}
 
-        function hablar(texto) {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            const utterance = new SpeechSynthesisUtterance(texto);
-            utterance.lang = 'es-ES';
-            synth.speak(utterance);
-        }
+async function consultarColab(pregunta, conVoz) {
+    const url = "https://TU-URL-DE-COLAB.a.run.app/preguntar";
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta: pregunta })
+    });
+    const data = await response.json();
+    if (conVoz) {
+        document.getElementById('respuesta').innerText = data.respuesta;
+        decirRespuesta(data.respuesta);
+    } else {
+        document.getElementById('respuestaTexto').innerText = data.respuesta;
+    }
+}
 
-        function enviarPregunta() {
-            let pregunta = document.getElementById('preguntaTexto').value.trim();
-            if (pregunta !== '') {
-                document.getElementById('transcripcion').innerText = 'Tú escribiste: ' + pregunta;
-                let respuesta = "Esta es la respuesta a tu pregunta: " + pregunta;
-                document.getElementById('respuesta').innerText = respuesta;
-                // No se activa voz aquí
-                document.getElementById('preguntaTexto').value = '';
-            } else {
-                alert('Por favor escribe una pregunta.');
-            }
-        }
-    </script>
+function decirRespuesta(texto) {
+    if (synth.speaking) synth.cancel();
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = 'es-ES';
+    synth.speak(utterance);
+}
+</script>
 
 </body>
 </html>
