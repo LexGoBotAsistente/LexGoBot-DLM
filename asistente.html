@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Asistente Inteligente LexGoBot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-        .seccion {
-            margin-bottom: 20px;
-        }
-        .boton {
-            background-color: #ff9900;
-            color: white;
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .boton:hover {
-            background-color: #cc7a00;
-            transform: scale(1.05);
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        #respuesta, #transcripcion {
-            background-color: #e0e0e0;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>LexGoBot Asistente Inteligente</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f9f9f9;
+    }
+    .boton {
+        background-color: #ff9900;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-bottom: 15px;
+    }
+    .boton:hover {
+        background-color: #cc7a00;
+        transform: scale(1.05);
+    }
+    textarea {
+        width: 100%;
+        height: 100px;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    #transcripcion, #respuesta, #respuestaTexto {
+        background-color: #e0e0e0;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+</style>
 </head>
 <body>
-    <h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
 
-    <!-- Sección para voz -->
-    <div class="seccion">
-        <button class="boton" onclick="activarVoz()">🎤 Activar Asistente de Voz Automático</button>
-        <div id="transcripcion">Aquí se mostrará lo que dices...</div>
-        <div id="respuesta">Aquí aparecerá la respuesta del asistente...</div>
-    </div>
+<h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
 
-    <!-- Sección para texto -->
-    <div class="seccion">
-        <textarea id="preguntaTexto" placeholder="Escribe tu pregunta o caso..."></textarea>
-        <button class="boton" onclick="enviarPorTexto()">Enviar Pregunta Escrita</button>
-        <div id="respuestaTexto">Aquí aparecerá la respuesta escrita...</div>
-    </div>
+<!-- Asistente de Voz -->
+<button class="boton" onclick="activarVoz()">🎤 Asistente de Voz (Escucha Automática)</button>
+<div id="transcripcion">🎤 Aquí aparecerá lo que dices...</div>
+<div id="respuesta">💬 Aquí aparecerá la respuesta del asistente...</div>
+
+<!-- Asistente por texto -->
+<textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
+<button class="boton" onclick="enviarPorTexto()">Enviar Pregunta Escrita</button>
+<div id="respuestaTexto">💬 Aquí aparecerá la respuesta en texto...</div>
 
 <script>
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -67,18 +62,18 @@ recognition.interimResults = false;
 const synth = window.speechSynthesis;
 
 function activarVoz() {
-    document.getElementById('transcripcion').innerText = 'Escuchando...';
+    document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
     recognition.start();
 }
 
 recognition.onresult = (event) => {
     const pregunta = event.results[0][0].transcript;
-    document.getElementById('transcripcion').innerText = 'Tú dijiste: ' + pregunta;
+    document.getElementById('transcripcion').innerText = '📝 Tú dijiste: ' + pregunta;
     consultarColab(pregunta, true);
 };
 
 recognition.onerror = (event) => {
-    document.getElementById('transcripcion').innerText = 'Error: ' + event.error;
+    document.getElementById('transcripcion').innerText = '❗ Error al escuchar: ' + event.error;
 };
 
 function enviarPorTexto() {
@@ -92,18 +87,19 @@ function enviarPorTexto() {
 }
 
 async function consultarColab(pregunta, conVoz) {
-    const url = "https://TU-URL-DE-COLAB.a.run.app/preguntar";
+    const url = "https://TU-URL-DE-COLAB.a.run.app/preguntar"; // Reemplaza por tu Colab endpoint
     const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pregunta: pregunta })
     });
     const data = await response.json();
+
     if (conVoz) {
-        document.getElementById('respuesta').innerText = data.respuesta;
+        document.getElementById('respuesta').innerText = '💬 Respuesta: ' + data.respuesta;
         decirRespuesta(data.respuesta);
     } else {
-        document.getElementById('respuestaTexto').innerText = data.respuesta;
+        document.getElementById('respuestaTexto').innerText = '💬 Respuesta: ' + data.respuesta;
     }
 }
 
