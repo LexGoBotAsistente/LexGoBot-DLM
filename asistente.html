@@ -1,72 +1,120 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Asistente de Voz - LexGoBot</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #4A00E0, #8E2DE2);
-        color: white;
-        text-align: center;
-        padding-top: 60px;
-        margin: 0;
-    }
-    h1 {
-        font-size: 50px;
-        margin-bottom: 20px;
-    }
-    #respuesta {
-        margin: 30px auto;
-        max-width: 800px;
-        font-size: 28px;
-        padding: 20px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 15px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <title>LexGoBot Asistente Jurídico 🏛️</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 48px;
+            margin-top: 40px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        #respuesta {
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 30px auto;
+            padding: 20px;
+            width: 80%;
+            border-radius: 15px;
+            font-size: 22px;
+            min-height: 100px;
+        }
+        #preguntaManual {
+            margin: 20px;
+            padding: 10px;
+            width: 60%;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+        }
+        #btnEnviar {
+            padding: 12px 25px;
+            font-size: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        #btnEnviar:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
-<body onload="iniciarConversacion()">
+<body>
 
-<h1>LexGoBot Asistente de Voz 🎤</h1>
-<p id="respuesta">Iniciando conversación...</p>
+    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
+    <p>Estoy escuchando, puedes hablar ahora...</p>
 
-<!-- Botón WhatsApp -->
-<a href="https://wa.me/573001112233" target="_blank" style="position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25D366; color: white; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100;">💬</a>
+    <div id="respuesta">Aquí aparecerá la respuesta escrita.</div>
+
+    <input type="text" id="preguntaManual" placeholder="Escribe aquí tu pregunta...">
+    <button id="btnEnviar" onclick="preguntarManual()">Enviar Pregunta</button>
 
 <script>
-const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-reconocimiento.lang = 'es-ES';
+    const respuestaDiv = document.getElementById('respuesta');
 
-function iniciarConversacion() {
-    hablar("Bienvenido a LexGoBot, asistente de voz. Puedes hablar y yo te contestaré.");
-    reconocimiento.start();
-}
+    function procesarPregunta(pregunta) {
+        let respuesta = "";
+        const preguntaLower = pregunta.toLowerCase();
 
-reconocimiento.onresult = async function(event) {
-    let pregunta = event.results[0][0].transcript;
-    document.getElementById('respuesta').innerText = 'Consultando sobre: ' + pregunta;
-    let respuesta = await fetch('https://tu-colab-url/consulta', {
-        method: 'POST',
-        body: JSON.stringify({pregunta}),
-        headers: {'Content-Type': 'application/json'}
-    }).then(res => res.json());
-    document.getElementById('respuesta').innerText = respuesta.respuesta;
-    hablar(respuesta.respuesta);
-};
+        if (preguntaLower.includes("contrato")) {
+            respuesta = "Un contrato es un acuerdo legalmente vinculante entre dos o más partes.";
+        } else if (preguntaLower.includes("familia") || preguntaLower.includes("divorcio")) {
+            respuesta = "El derecho de familia regula temas como matrimonio, divorcio, custodia de hijos, y más.";
+        } else if (preguntaLower.includes("pensión")) {
+            respuesta = "La pensión es un beneficio económico otorgado por jubilación, invalidez o fallecimiento.";
+        } else {
+            respuesta = "No tengo una respuesta exacta, te sugiero consultar con un abogado especializado.";
+        }
 
-reconocimiento.onend = function() {
-    hablar("¿Deseas preguntar algo más?");
-    reconocimiento.start();
-}
+        respuestaDiv.innerText = respuesta;
+        const voz = new SpeechSynthesisUtterance(respuesta);
+        voz.lang = "es-ES";
+        speechSynthesis.speak(voz);
+    }
 
-function hablar(texto){
-    let voz = new SpeechSynthesisUtterance(texto);
-    voz.lang = "es-ES";
-    speechSynthesis.speak(voz);
-}
+    function preguntarManual() {
+        const pregunta = document.getElementById('preguntaManual').value;
+        if (pregunta.trim() !== "") {
+            procesarPregunta(pregunta);
+        }
+    }
+
+    function reconocimientoVoz() {
+        const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        reconocimiento.lang = 'es-ES';
+        reconocimiento.interimResults = false;
+
+        reconocimiento.start();
+
+        reconocimiento.onresult = function(event) {
+            const pregunta = event.results[0][0].transcript;
+            procesarPregunta(pregunta);
+        };
+
+        reconocimiento.onend = function() {
+            reconocimiento.start(); // Escucha continua
+        };
+
+        reconocimiento.onerror = function(event) {
+            console.error("Error reconocimiento de voz:", event.error);
+            setTimeout(() => reconocimiento.start(), 1000);
+        };
+    }
+
+    window.onload = () => {
+        reconocimientoVoz();
+    }
 </script>
 
 </body>
 </html>
-
