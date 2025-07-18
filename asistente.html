@@ -1,78 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Asistente Voz con Transcripción</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        button { margin: 5px; padding: 10px 20px; font-size: 16px; }
-        textarea, input { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; }
-    </style>
+<meta charset="UTF-8">
+<title>LexGoBot Asistente Jurídico 🏛️</title>
+<style>
+    body {
+        background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 48px;
+        margin-top: 40px;
+    }
+    .pregunta, .respuesta {
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 20px auto;
+        padding: 20px;
+        width: 80%;
+        border-radius: 15px;
+        font-size: 22px;
+    }
+</style>
 </head>
 <body>
-<div class="container">
-    <h2>Asistente de Voz y Texto</h2>
-    <button id="startVoice">🎤 Activar Asistente de Voz</button>
-    <button id="stopVoice">🛑 Detener Voz</button>
 
-    <textarea id="output" rows="4" placeholder="Aquí verás la transcripción..." readonly></textarea>
+<h1>LexGoBot Asistente Jurídico 🏛️</h1>
+<p>Escucho tu consulta, habla cuando quieras:</p>
 
-    <h3>Escribe tu pregunta</h3>
-    <input type="text" id="inputBox" placeholder="Escribe aquí...">
-    <button id="sendBtn">Enviar y responder por voz</button>
-</div>
+<div class="pregunta" id="textoPregunta">Aquí verás tu pregunta transcrita...</div>
+<div class="respuesta" id="textoRespuesta">Aquí aparecerá mi respuesta...</div>
 
 <script>
-    // Inicializar Speech Recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
+const textoPregunta = document.getElementById('textoPregunta');
+const textoRespuesta = document.getElementById('textoRespuesta');
 
-    // Inicializar síntesis de voz
-    function speak(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-ES';
-        speechSynthesis.speak(utterance);
+function procesarPregunta(pregunta) {
+    let respuesta = "";
+    const preguntaLower = pregunta.toLowerCase();
+
+    if (preguntaLower.includes("contrato")) {
+        respuesta = "Un contrato es un acuerdo legalmente vinculante entre dos o más partes.";
+    } else if (preguntaLower.includes("familia") || preguntaLower.includes("divorcio")) {
+        respuesta = "El derecho de familia regula matrimonio, divorcio y custodia.";
+    } else if (preguntaLower.includes("pensión")) {
+        respuesta = "La pensión es un beneficio económico otorgado por jubilación o fallecimiento.";
+    } else {
+        respuesta = "No tengo una respuesta exacta. Recomiendo consultar un abogado.";
     }
 
-    // Evento: Activar micrófono
-    document.getElementById('startVoice').addEventListener('click', () => {
-        recognition.start();
-        speak("Asistente de voz activado. Estoy escuchando.");
-    });
+    textoRespuesta.innerText = respuesta;
+    const voz = new SpeechSynthesisUtterance(respuesta);
+    voz.lang = "es-ES";
+    speechSynthesis.speak(voz);
+}
 
-    // Evento: Detener micrófono
-    document.getElementById('stopVoice').addEventListener('click', () => {
-        recognition.stop();
-        speak("Asistente de voz detenido.");
-    });
+function iniciarReconocimiento() {
+    const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimiento.lang = 'es-ES';
+    reconocimiento.start();
 
-    // Mostrar texto reconocido
-    recognition.onresult = function(event) {
-        const text = event.results[0][0].transcript;
-        document.getElementById('output').value = text;
-        speak("Has dicho: " + text);
-        // Aquí podrías enviar el texto a tu backend y responder con GPT
+    reconocimiento.onresult = function(event) {
+        const pregunta = event.results[0][0].transcript;
+        textoPregunta.innerText = pregunta;
+        procesarPregunta(pregunta);
     };
 
-    // Escribir y responder por voz
-    document.getElementById('sendBtn').addEventListener('click', () => {
-        const inputText = document.getElementById('inputBox').value;
-        if (inputText.trim() !== "") {
-            document.getElementById('output').value = inputText;
-            speak("Tu pregunta es: " + inputText + ". Esta es una respuesta de ejemplo.");
-            // Aquí puedes conectar con backend y obtener respuesta real
-        } else {
-            speak("Por favor escribe una pregunta válida.");
-        }
-    });
-
-    // Opcional: Mostrar errores
-    recognition.onerror = function(event) {
-        console.error("Error en reconocimiento de voz: ", event.error);
-        speak("Ocurrió un error: " + event.error);
+    reconocimiento.onend = function() {
+        reconocimiento.start();
     };
+
+    reconocimiento.onerror = function() {
+        textoRespuesta.innerText = "No logré entender, puedes repetir.";
+        setTimeout(() => reconocimiento.start(), 1000);
+    };
+}
+
+window.onload = iniciarReconocimiento;
 </script>
+
 </body>
 </html>
