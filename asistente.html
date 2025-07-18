@@ -2,55 +2,58 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>LexGoBot Asistente Inteligente Automático</title>
+<title>LexGoBot Asistente de Voz Inteligente</title>
 <style>
     body {
         font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
         margin: 20px;
-        background-color: #f9f9f9;
     }
     .boton {
-        background-color: #ff9900;
+        background-color: #b0b0b0;
         color: white;
         padding: 15px;
         font-size: 18px;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
         margin-bottom: 15px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
     }
     .boton:hover {
-        background-color: #cc7a00;
+        background-color: #8a8a8a;
         transform: scale(1.05);
     }
     textarea {
         width: 100%;
         height: 100px;
-        border-radius: 10px;
-        padding: 10px;
+        border-radius: 12px;
+        padding: 12px;
         font-size: 16px;
         margin-top: 10px;
+        border: 1px solid #ccc;
     }
     #transcripcion, #respuesta, #respuestaTexto {
         background-color: #e0e0e0;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-top: 15px;
         font-weight: bold;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
     }
 </style>
 </head>
 <body>
 
-<h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
+<h1>LexGoBot Asistente Inteligente</h1>
 
-<div id="transcripcion">🎤 Aquí aparecerá lo que dices...</div>
-<div id="respuesta">💬 Aquí aparecerá la respuesta del asistente...</div>
+<div id="transcripcion">🎤 Aquí se mostrará lo que dices...</div>
+<div id="respuesta">💬 Aquí se mostrará la respuesta...</div>
 
 <textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
 <button class="boton" onclick="enviarPorTexto()">Enviar Pregunta Escrita</button>
-<div id="respuestaTexto">💬 Aquí aparecerá la respuesta en texto...</div>
+<div id="respuestaTexto">💬 Aquí aparecerá la respuesta escrita...</div>
 
 <script>
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -58,54 +61,68 @@ recognition.lang = 'es-ES';
 recognition.interimResults = false;
 const synth = window.speechSynthesis;
 
+// Activar micrófono automáticamente al entrar
 window.onload = function() {
     document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
     recognition.start();
-}
+};
 
+// Responde solo una vez por cada escucha
 recognition.onresult = (event) => {
     const pregunta = event.results[0][0].transcript;
     document.getElementById('transcripcion').innerText = '📝 Tú dijiste: ' + pregunta;
-    consultarColab(pregunta, true);
+    generarRespuesta(pregunta, true);
 };
 
-recognition.onerror = (event) => {
-    document.getElementById('transcripcion').innerText = '❗ Error al escuchar: ' + event.error;
-};
-
+// Enviar por texto
 function enviarPorTexto() {
     const pregunta = document.getElementById('preguntaTexto').value.trim();
     if (pregunta) {
-        consultarColab(pregunta, false);
+        generarRespuesta(pregunta, false);
         document.getElementById('preguntaTexto').value = '';
     } else {
         alert('Por favor escribe una pregunta.');
     }
 }
 
-async function consultarColab(pregunta, conVoz) {
-    const url = "https://TU-URL-DE-COLAB.a.run.app/preguntar"; // Reemplaza por tu Colab endpoint
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta: pregunta })
-    });
-    const data = await response.json();
+// Genera respuesta simulada
+function generarRespuesta(pregunta, conVoz) {
+    let respuesta = "";
+
+    const claves = ['contrato', 'reclamo', 'denuncia', 'demanda', 'pago', 'impuesto', 'sanción'];
+    const encontrado = claves.some(palabra => pregunta.toLowerCase().includes(palabra));
+
+    if (encontrado) {
+        respuesta = "Hemos detectado que tu pregunta es sobre un tema legal frecuente. Aquí tienes una orientación básica.";
+    } else {
+        respuesta = "No tengo suficiente información sobre tu caso, serás remitido a un abogado para una mejor atención.";
+    }
 
     if (conVoz) {
-        document.getElementById('respuesta').innerText = '💬 Respuesta: ' + data.respuesta;
-        decirRespuesta(data.respuesta);
+        document.getElementById('respuesta').innerText = '💬 Respuesta: ' + respuesta;
+        decirRespuesta(respuesta);
     } else {
-        document.getElementById('respuestaTexto').innerText = '💬 Respuesta: ' + data.respuesta;
+        document.getElementById('respuestaTexto').innerText = '💬 Respuesta: ' + respuesta;
     }
 }
 
+// Leer respuesta solo una vez
 function decirRespuesta(texto) {
     if (synth.speaking) synth.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'es-ES';
     synth.speak(utterance);
 }
+
+// Capturar errores de micrófono
+recognition.onerror = (event) => {
+    document.getElementById('transcripcion').innerText = '❗ Error al escuchar: ' + event.error;
+};
+
+// Escuchar de nuevo cada vez que termina una interacción
+recognition.onend = () => {
+    recognition.start();
+};
 </script>
 
 </body>
