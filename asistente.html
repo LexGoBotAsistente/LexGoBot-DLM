@@ -1,119 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>LexGoBot Asistente Jurídico 🏛️</title>
-    <style>
-        body {
-            background: linear-gradient(to bottom, #0074D9, #7FDBFF);
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            font-size: 48px;
-            margin-top: 40px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-        }
-        #respuesta {
-            background-color: rgba(255, 255, 255, 0.2);
-            margin: 30px auto;
-            padding: 20px;
-            width: 80%;
-            border-radius: 15px;
-            font-size: 22px;
-            min-height: 100px;
-        }
-        #preguntaManual {
-            margin: 20px;
-            padding: 10px;
-            width: 60%;
-            font-size: 18px;
-            border-radius: 8px;
-            border: none;
-        }
-        #btnEnviar {
-            padding: 12px 25px;
-            font-size: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        #btnEnviar:hover {
-            background-color: #45a049;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>LexGoBot Asistente Jurídico 🏛️</title>
+<style>
+    body {
+        background: linear-gradient(to bottom, #0074D9, #7FDBFF);
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 48px;
+        margin-top: 40px;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+    .pregunta, .respuesta {
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 20px auto;
+        padding: 20px;
+        width: 80%;
+        border-radius: 15px;
+        font-size: 22px;
+        min-height: 60px;
+    }
+    .boton {
+        margin: 10px;
+        padding: 15px 25px;
+        font-size: 22px;
+        background-color: #A9A9A9;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+    .boton:hover {
+        background-color: #8F8F8F;
+    }
+</style>
 </head>
 <body>
 
-    <h1>LexGoBot Asistente Jurídico 🏛️</h1>
-    <p>Estoy escuchando, puedes hablar ahora...</p>
+<h1>LexGoBot Asistente Jurídico 🏛️</h1>
+<p>Escucho tu consulta, habla cuando quieras.</p>
 
-    <div id="respuesta">Aquí aparecerá la respuesta escrita.</div>
-
-    <input type="text" id="preguntaManual" placeholder="Escribe aquí tu pregunta...">
-    <button id="btnEnviar" onclick="preguntarManual()">Enviar Pregunta</button>
+<div class="pregunta" id="textoPregunta">Aquí verás tu pregunta transcrita...</div>
+<div class="respuesta" id="textoRespuesta">Aquí aparecerá mi respuesta...</div>
 
 <script>
-    const respuestaDiv = document.getElementById('respuesta');
+const textoPregunta = document.getElementById('textoPregunta');
+const textoRespuesta = document.getElementById('textoRespuesta');
 
-    function procesarPregunta(pregunta) {
-        let respuesta = "";
-        const preguntaLower = pregunta.toLowerCase();
+function procesarPregunta(pregunta) {
+    let respuesta = "";
+    const preguntaLower = pregunta.toLowerCase();
 
-        if (preguntaLower.includes("contrato")) {
-            respuesta = "Un contrato es un acuerdo legalmente vinculante entre dos o más partes.";
-        } else if (preguntaLower.includes("familia") || preguntaLower.includes("divorcio")) {
-            respuesta = "El derecho de familia regula temas como matrimonio, divorcio, custodia de hijos, y más.";
-        } else if (preguntaLower.includes("pensión")) {
-            respuesta = "La pensión es un beneficio económico otorgado por jubilación, invalidez o fallecimiento.";
-        } else {
-            respuesta = "No tengo una respuesta exacta, te sugiero consultar con un abogado especializado.";
-        }
-
-        respuestaDiv.innerText = respuesta;
-        const voz = new SpeechSynthesisUtterance(respuesta);
-        voz.lang = "es-ES";
-        speechSynthesis.speak(voz);
+    if (preguntaLower.includes("contrato")) {
+        respuesta = "Un contrato es un acuerdo legalmente vinculante entre dos o más partes.";
+    } else if (preguntaLower.includes("familia") || preguntaLower.includes("divorcio")) {
+        respuesta = "El derecho de familia regula temas como matrimonio, divorcio y custodia.";
+    } else if (preguntaLower.includes("pensión")) {
+        respuesta = "La pensión es un beneficio económico otorgado por jubilación o fallecimiento.";
+    } else {
+        respuesta = "No tengo una respuesta exacta, recomiendo consultar un abogado.";
     }
 
-    function preguntarManual() {
-        const pregunta = document.getElementById('preguntaManual').value;
-        if (pregunta.trim() !== "") {
-            procesarPregunta(pregunta);
-        }
-    }
+    textoRespuesta.innerText = respuesta;
+    const voz = new SpeechSynthesisUtterance(respuesta);
+    voz.lang = "es-ES";
+    speechSynthesis.speak(voz);
+}
 
-    function reconocimientoVoz() {
-        const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        reconocimiento.lang = 'es-ES';
-        reconocimiento.interimResults = false;
+function iniciarReconocimiento() {
+    const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimiento.lang = 'es-ES';
+    reconocimiento.start();
 
-        reconocimiento.start();
+    reconocimiento.onresult = function(event) {
+        const pregunta = event.results[0][0].transcript;
+        textoPregunta.innerText = pregunta;
+        procesarPregunta(pregunta);
+    };
 
-        reconocimiento.onresult = function(event) {
-            const pregunta = event.results[0][0].transcript;
-            procesarPregunta(pregunta);
-        };
+    reconocimiento.onend = function() {
+        reconocimiento.start(); // Escucha continuamente
+    };
 
-        reconocimiento.onend = function() {
-            reconocimiento.start(); // Escucha continua
-        };
+    reconocimiento.onerror = function(event) {
+        textoRespuesta.innerText = "Hubo un problema, vuelve a intentar.";
+        setTimeout(() => reconocimiento.start(), 2000);
+    };
+}
 
-        reconocimiento.onerror = function(event) {
-            console.error("Error reconocimiento de voz:", event.error);
-            setTimeout(() => reconocimiento.start(), 1000);
-        };
-    }
-
-    window.onload = () => {
-        reconocimientoVoz();
-    }
+window.onload = () => iniciarReconocimiento();
 </script>
 
 </body>
