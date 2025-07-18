@@ -67,6 +67,7 @@ window.onload = function() {
 };
 
 recognition.onresult = (event) => {
+    recognition.stop(); // Detiene para evitar doble activación
     const pregunta = event.results[0][0].transcript;
     document.getElementById('transcripcion').innerText = '📝 Tú dijiste: ' + pregunta;
     generarRespuesta(pregunta, true);
@@ -109,6 +110,10 @@ function decirRespuesta(texto) {
     if (synth.speaking) synth.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'es-ES';
+    utterance.onend = () => {
+        recognition.start(); // Reactiva la escucha después de hablar
+        document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
+    };
     synth.speak(utterance);
 }
 
@@ -117,7 +122,11 @@ recognition.onerror = (event) => {
 };
 
 recognition.onend = () => {
-    recognition.start();
+    // Si no está hablando, vuelve a escuchar
+    if (!synth.speaking) {
+        recognition.start();
+        document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
+    }
 };
 </script>
 
