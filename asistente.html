@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>LexGoBot Asistente</title>
+    <title>LexGoBot Asistente Completo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -10,11 +10,34 @@
             background-color: #f7f7f7;
         }
 
-        #respuesta {
+        .gratis, .premium {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .gratis {
+            background-color: #007bff;
+        }
+
+        .premium {
+            background-color: #ff9900;
+        }
+
+        .gratis:hover, .premium:hover {
+            transform: scale(1.05);
+        }
+
+        #respuesta, #transcripcion {
             background-color: #e6e6e6;
             padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
@@ -47,32 +70,6 @@
             background-color: #0056b3;
             transform: scale(1.05);
         }
-
-        /* Zona gratuita */
-        .gratis {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .gratis:hover {
-            transform: scale(1.05);
-        }
-
-        /* Zona premium naranja */
-        .premium {
-            background-color: #ff9900;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .premium:hover {
-            transform: scale(1.05);
-        }
     </style>
 </head>
 <body>
@@ -80,10 +77,12 @@
     <h1>LexGoBot Asistente</h1>
 
     <div class="gratis">Zona Gratuita</div>
-    <br>
     <div class="premium">Zona Premium</div>
 
-    <div id="respuesta">Aquí aparecerá mi respuesta.</div>
+    <div id="transcripcion">Aquí aparecerá lo que diga el usuario...</div>
+    <div id="respuesta">Aquí aparecerá la respuesta del asistente...</div>
+
+    <button onclick="iniciarEscucha()">🎤 Activar Micrófono y Escuchar</button>
 
     <div id="escribir-pregunta">
         <textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
@@ -91,40 +90,51 @@
     </div>
 
     <script>
-        let synth = window.speechSynthesis;
-        let repetirContador = 0;
+        // Asistente de voz escucha
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'es-ES';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
 
-        function hablar(texto) {
-            if (repetirContador < 2) {
-                let utterance = new SpeechSynthesisUtterance(texto);
-                utterance.lang = 'es-ES';
-                utterance.onend = () => {
-                    repetirContador++;
-                    if (repetirContador < 2) {
-                        setTimeout(() => hablar(texto), 500);
-                    }
-                };
-                synth.speak(utterance);
-            }
+        // Voz para responder
+        const synth = window.speechSynthesis;
+
+        function iniciarEscucha() {
+            document.getElementById('transcripcion').innerText = 'Escuchando...';
+            recognition.start();
         }
 
-        function mostrarRespuesta(respuesta) {
+        recognition.onresult = (event) => {
+            const pregunta = event.results[0][0].transcript;
+            document.getElementById('transcripcion').innerText = 'Tú dijiste: ' + pregunta;
+            procesarPregunta(pregunta);
+        };
+
+        recognition.onerror = (event) => {
+            document.getElementById('transcripcion').innerText = 'Error al escuchar: ' + event.error;
+        };
+
+        function procesarPregunta(texto) {
+            let respuesta = "Esta es la respuesta a tu pregunta: " + texto;
             document.getElementById('respuesta').innerText = respuesta;
-            repetirContador = 0;
             hablar(respuesta);
         }
 
-        // Simulación de procesamiento (puedes conectar tu API aquí)
-        function procesarPregunta(texto) {
-            let respuesta = "Esta es la respuesta a tu pregunta: " + texto;
-            mostrarRespuesta(respuesta);
+        function hablar(texto) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            const utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = 'es-ES';
+            synth.speak(utterance);
         }
 
         function enviarPregunta() {
             let pregunta = document.getElementById('preguntaTexto').value.trim();
             if (pregunta !== '') {
+                document.getElementById('transcripcion').innerText = 'Tú escribiste: ' + pregunta;
                 procesarPregunta(pregunta);
-                document.getElementById('preguntaTexto').value = ''; // Limpiar campo
+                document.getElementById('preguntaTexto').value = '';
             } else {
                 alert('Por favor escribe una pregunta.');
             }
