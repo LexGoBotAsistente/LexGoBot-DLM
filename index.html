@@ -37,14 +37,19 @@ h1 {
     box-shadow: 0 8px 16px rgba(0,0,0,0.4);
 }
 
+h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
 .btn {
     display: block;
     margin: 0 auto;
     margin-top: 10px;
     padding: 15px 25px;
     font-size: 20px;
-    background-color: #FFC107;
-    color: white;
+    background-color: #98ff98; /* Verde menta */
+    color: #000;
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -53,7 +58,7 @@ h1 {
 }
 
 .btn:hover {
-    background-color: #FFA500;
+    background-color: #7ce97c;
     transform: scale(1.05);
 }
 
@@ -87,7 +92,7 @@ h1 {
     position: fixed;
     bottom: 100px;
     right: 20px;
-    background: #FFC107;
+    background: #FF851B;
     color: white;
     padding: 12px 18px;
     font-size: 16px;
@@ -100,7 +105,7 @@ h1 {
 
 .apoyanos:hover {
     transform: scale(1.08);
-    background-color: #FFA500;
+    background-color: #FF6300;
 }
 </style>
 </head>
@@ -110,130 +115,23 @@ h1 {
 
 <div class="zona">
   <div class="zona-bloque">
-    <h2>Ingresar Zona Gratuita</h2>
-    <button class="btn" onclick="location.href='gratuito.html'">Ingresar</button>
+    <h2>Zona Gratuita</h2>
+    <button class="btn" onclick="location.href='gratuito.html'">Ingresar Zona Gratuita</button>
   </div>
 
   <div class="zona-bloque">
-    <h2>Ingresar Zona Premium</h2>
-    <button class="btn" onclick="location.href='premium.html'">Ingresar</button>
+    <h2>Zona Premium</h2>
+    <button class="btn" onclick="location.href='premium.html'">Ingresar Zona Premium</button>
   </div>
 </div>
 
-<button class="btn" onclick="location.href='asistente.html'">🎤 Asistente de Voz</button>
+<button class="btn" onclick="location.href='asistente.html'">🎤 Asistente Jurídico</button>
 
 <div class="footer">© 2025 LexGoBot Jurídico</div>
 
-<a class="whatsapp" href="https://wa.me/573001234567" target="_blank" title="Escríbenos por WhatsApp">💬</a>
+<a class="whatsapp" href="https://wa.me/573001234567" target="_blank" title="WhatsApp">💬</a>
+
 <a class="apoyanos" href="https://api.whatsapp.com/send?phone=573424565436&text=Hola%2C+quiero+apoyar+a+LexGoBot+por+Nequi+3424565436" target="_blank">💖 Apóyanos</a>
 
 </body>
 </html>
-✅ asistente.html CON VOZ ESCUCHANDO CONTINUAMENTE:
-html
-Copiar
-Editar
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>LexGoBot Asistente Voz</title>
-<style>
-body {
-    background: linear-gradient(to bottom, #0074D9, #7FDBFF);
-    font-family: Arial, sans-serif;
-    margin: 0; padding: 0;
-    text-align: center; color: #fff;
-}
-
-h1 {
-    font-size: 45px;
-    margin-top: 50px;
-}
-
-textarea {
-    width: 80%;
-    height: 150px;
-    margin-top: 20px;
-    border-radius: 12px;
-    padding: 15px;
-    font-size: 18px;
-}
-
-button {
-    margin-top: 20px;
-    padding: 15px 25px;
-    font-size: 20px;
-    background-color: #FFC107;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-}
-
-button:hover {
-    background-color: #FFA500;
-}
-</style>
-</head>
-<body onload="saludar()">
-
-<h1>LexGoBot Asistente Jurídico 🏛️</h1>
-<p>Estoy escuchando, puedes hablar ahora...</p>
-
-<textarea id="pregunta" placeholder="Si prefieres, escribe aquí tu pregunta..."></textarea><br>
-<button onclick="leerPregunta()">Enviar Pregunta</button>
-
-<script>
-function saludar() {
-    const saludo = new SpeechSynthesisUtterance("Bienvenido a LexGoBot. Puedes hacerme preguntas legales ahora. Estoy escuchando.");
-    saludo.lang = "es-ES";
-    speechSynthesis.speak(saludo);
-    startRecognition();
-}
-
-function startRecognition() {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'es-ES';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    recognition.start();
-
-    recognition.onresult = function(event) {
-        const pregunta = event.results[0][0].transcript;
-        document.getElementById('pregunta').value = pregunta;
-        responder(pregunta);
-    };
-
-    recognition.onend = function() {
-        startRecognition();
-    };
-}
-
-function responder(pregunta) {
-    let respuesta = "";
-
-    if (pregunta.toLowerCase().includes("contrato")) {
-        respuesta = "Un contrato es un acuerdo legal entre dos o más personas.";
-    } else if (pregunta.toLowerCase().includes("familia")) {
-        respuesta = "El derecho de familia regula relaciones como matrimonio, divorcio y custodia.";
-    } else {
-        respuesta = "Estoy procesando tu pregunta y mejorando mi conocimiento.";
-    }
-
-    const respuestaVoz = new SpeechSynthesisUtterance(respuesta);
-    respuestaVoz.lang = "es-ES";
-    speechSynthesis.speak(respuestaVoz);
-}
-
-function leerPregunta() {
-    const pregunta = document.getElementById('pregunta').value;
-    if (pregunta.length > 0) responder(pregunta);
-}
-</script>
-
-</body>
-</html>
-
-
