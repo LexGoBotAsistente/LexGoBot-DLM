@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>LexGoBot Asistente de Voz Inteligente</title>
+<title>LexGoBot Asistente Inteligente</title>
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
+        background-color: #f9f9f9;
         margin: 20px;
     }
     .boton {
-        background-color: #b0b0b0;
+        background-color: #ff9900;
         color: white;
         padding: 15px;
         font-size: 18px;
@@ -22,7 +22,7 @@
         box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
     }
     .boton:hover {
-        background-color: #8a8a8a;
+        background-color: #cc7a00;
         transform: scale(1.05);
     }
     textarea {
@@ -35,7 +35,7 @@
         border: 1px solid #ccc;
     }
     #transcripcion, #respuesta, #respuestaTexto {
-        background-color: #e0e0e0;
+        background-color: #ffe5cc;
         padding: 15px;
         border-radius: 12px;
         margin-top: 15px;
@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<h1>LexGoBot Asistente Inteligente</h1>
+<h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
 
 <div id="transcripcion">🎤 Aquí se mostrará lo que dices...</div>
 <div id="respuesta">💬 Aquí se mostrará la respuesta...</div>
@@ -61,23 +61,21 @@ recognition.lang = 'es-ES';
 recognition.interimResults = false;
 const synth = window.speechSynthesis;
 
-// Activar micrófono automáticamente al entrar
 window.onload = function() {
     document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
     recognition.start();
 };
 
-// Responde solo una vez por cada escucha
 recognition.onresult = (event) => {
     const pregunta = event.results[0][0].transcript;
     document.getElementById('transcripcion').innerText = '📝 Tú dijiste: ' + pregunta;
     generarRespuesta(pregunta, true);
 };
 
-// Enviar por texto
 function enviarPorTexto() {
     const pregunta = document.getElementById('preguntaTexto').value.trim();
     if (pregunta) {
+        document.getElementById('transcripcion').innerText = '📝 Pregunta escrita: ' + pregunta;
         generarRespuesta(pregunta, false);
         document.getElementById('preguntaTexto').value = '';
     } else {
@@ -85,28 +83,28 @@ function enviarPorTexto() {
     }
 }
 
-// Genera respuesta simulada
 function generarRespuesta(pregunta, conVoz) {
     let respuesta = "";
-
     const claves = ['contrato', 'reclamo', 'denuncia', 'demanda', 'pago', 'impuesto', 'sanción'];
     const encontrado = claves.some(palabra => pregunta.toLowerCase().includes(palabra));
 
     if (encontrado) {
-        respuesta = "Hemos detectado que tu pregunta es sobre un tema legal frecuente. Aquí tienes una orientación básica.";
+        respuesta = "Hemos detectado un tema legal frecuente. Aquí tienes una orientación básica.";
     } else {
-        respuesta = "No tengo suficiente información sobre tu caso, serás remitido a un abogado para una mejor atención.";
+        respuesta = "No tengo suficiente información sobre tu caso, serás remitido a un abogado para mejor orientación.";
+    }
+
+    document.getElementById('respuesta').innerText = '💬 Respuesta: ' + respuesta;
+
+    if (!conVoz) {
+        document.getElementById('respuestaTexto').innerText = '💬 Respuesta (texto): ' + respuesta;
     }
 
     if (conVoz) {
-        document.getElementById('respuesta').innerText = '💬 Respuesta: ' + respuesta;
         decirRespuesta(respuesta);
-    } else {
-        document.getElementById('respuestaTexto').innerText = '💬 Respuesta: ' + respuesta;
     }
 }
 
-// Leer respuesta solo una vez
 function decirRespuesta(texto) {
     if (synth.speaking) synth.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
@@ -114,12 +112,10 @@ function decirRespuesta(texto) {
     synth.speak(utterance);
 }
 
-// Capturar errores de micrófono
 recognition.onerror = (event) => {
     document.getElementById('transcripcion').innerText = '❗ Error al escuchar: ' + event.error;
 };
 
-// Escuchar de nuevo cada vez que termina una interacción
 recognition.onend = () => {
     recognition.start();
 };
