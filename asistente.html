@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>LexGoBot Asistente Inteligente</title>
+<title>LexGoBot Asistente Inteligente Automático</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -45,12 +45,9 @@
 
 <h1>LexGoBot Asistente de Voz e Inteligencia Artificial</h1>
 
-<!-- Asistente de Voz -->
-<button class="boton" onclick="activarVoz()">🎤 Asistente de Voz (Escucha Automática)</button>
 <div id="transcripcion">🎤 Aquí aparecerá lo que dices...</div>
 <div id="respuesta">💬 Aquí aparecerá la respuesta del asistente...</div>
 
-<!-- Asistente por texto -->
 <textarea id="preguntaTexto" placeholder="Escribe aquí tu pregunta o caso..."></textarea>
 <button class="boton" onclick="enviarPorTexto()">Enviar Pregunta Escrita</button>
 <div id="respuestaTexto">💬 Aquí aparecerá la respuesta en texto...</div>
@@ -61,7 +58,7 @@ recognition.lang = 'es-ES';
 recognition.interimResults = false;
 const synth = window.speechSynthesis;
 
-function activarVoz() {
+window.onload = function() {
     document.getElementById('transcripcion').innerText = '🎤 Escuchando...';
     recognition.start();
 }
